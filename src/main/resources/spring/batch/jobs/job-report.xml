@@ -23,7 +23,9 @@
 
 		<!-- Read a csv file -->
 		<property name="resource" value="classpath:cvs/report.csv" />
-
+		<!-- Skip the line -->
+		<property name="linesToSkip" value="1"/>
+		
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
 

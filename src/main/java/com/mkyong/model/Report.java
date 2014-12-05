@@ -4,8 +4,8 @@ public class Report {
 
 	private String Date;
 	private String Impressions;
-	private String Clicks;
-	private String Earning;
+	private Integer Clicks;
+	private Double Earning;
 	
 	public String getDate() {
 		return Date;
@@ -19,18 +19,17 @@ public class Report {
 	public void setImpressions(String impressions) {
 		Impressions = impressions;
 	}
-	public String getClicks() {
+	public Integer getClicks() {
 		return Clicks;
 	}
-	public void setClicks(String clicks) {
+	public void setClicks(Integer clicks) {
 		Clicks = clicks;
 	}
-	public String getEarning() {
+	public Double getEarning() {
 		return Earning;
 	}
-	public void setEarning(String earning) {
+	public void setEarning(Double earning) {
 		Earning = earning;
 	}
-
 	
 }
