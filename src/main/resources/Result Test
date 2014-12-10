@@ -16,6 +16,7 @@ commit interval :30, throttle-limit : 10
 
 ////Local Partitioning(6000 data)
 ////Kesimpulan untuk local partitioning, bagus untuk ngetrack/retry jika ada error, tapi untuk input stream(biasanya file) mending pake local chunking aja, karena kalau pakai partitioning terkadang stream sudah di close sama partition yg terakhir, padahal masih ada partion yg memproses
+////Kecuali untuk readernya pake bean biasa(bukan xml), gunakan destroy-method untuk close stream-nya
 belum di partitioning
 ================================= Start Wed Dec 10 14:25:22 ICT 2014
 ================================= End   Wed Dec 10 14:26:35 ICT 2014
