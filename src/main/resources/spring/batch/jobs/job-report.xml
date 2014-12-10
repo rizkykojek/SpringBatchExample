@@ -5,16 +5,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/batch
 		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
 		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
 
     <bean id="report" class="com.mkyong.model.Report" scope="prototype" />
     <bean id="listener" class="com.mkyong.listener.ReportJobListener" scope="singleton"/>
     
+    <task:executor id="executor" pool-size="50"/>
+    
 	<batch:job id="reportJob">
 		<batch:step id="step1">
-			<batch:tasklet start-limit="3">
+			<!-- throttle limit itu jumlah thread, pooled by task executor   -->
+			<batch:tasklet start-limit="3" task-executor="executor" throttle-limit="10">
 				<batch:chunk reader="cvsFileItemReader" writer="mysqlItemWriter"
-					commit-interval="3">
+					commit-interval="30">
 				
 					<!-- <batch:skippable-exception-classes>
 						<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
@@ -23,13 +28,15 @@
 				<!-- <batch:no-rollback-exception-classes>
 					<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
 				</batch:no-rollback-exception-classes> -->
-			</batch:tasklet>
+			</batch:tasklet>			
 		</batch:step>
 		<batch:listeners>
 			<batch:listener ref="listener"/>
 		</batch:listeners>
 	</batch:job>
-
+	
+	
+	
 	<bean id="cvsFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
 
 		<!-- Read a csv file -->
