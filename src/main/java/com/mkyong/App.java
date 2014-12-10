@@ -1,5 +1,7 @@
 package com.mkyong;
 
+import java.util.Date;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -13,7 +15,8 @@ public class App {
 		String[] springConfig  = 
 			{	"spring/batch/config/database.xml", 
 				"spring/batch/config/context.xml",
-				"spring/batch/jobs/job-report.xml" 
+				"spring/batch/jobs/job-report-partitioning.xml"
+				/*"spring/batch/jobs/job-report.xml"*/ 
 			};
 		
 		ApplicationContext context = 
@@ -23,10 +26,11 @@ public class App {
 		Job job = (Job) context.getBean("reportJob");
 
 		try {
-
+			System.out.println("================================= Start " + new Date());
 			JobExecution execution = jobLauncher.run(job, new JobParameters());
 			System.out.println("Exit Status : " + execution.getStatus());
-
+			System.out.println("================================= End   " + new Date());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

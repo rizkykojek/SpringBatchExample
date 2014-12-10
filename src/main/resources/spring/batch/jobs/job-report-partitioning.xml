@@ -11,24 +11,22 @@
 
     <bean id="report" class="com.mkyong.model.Report" scope="prototype" />
     <bean id="listener" class="com.mkyong.listener.ReportJobListener" scope="singleton"/>
+    <bean id="partitioner" class="com.mkyong.partition.ModulePartitioner" scope="singleton"/>
     
     <task:executor id="executor" pool-size="50"/>
     
 	<batch:job id="reportJob">
 		<batch:step id="step1">
-			<!-- throttle limit itu jumlah thread, pooled by task executor   -->
-			<batch:tasklet start-limit="3" task-executor="executor" throttle-limit="10">
-				<batch:chunk reader="cvsFileItemReader" writer="mysqlItemWriter"
-					commit-interval="30">
-				
-					<!-- <batch:skippable-exception-classes>
-						<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
-					</batch:skippable-exception-classes> -->
-				</batch:chunk>
-				<!-- <batch:no-rollback-exception-classes>
-					<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
-				</batch:no-rollback-exception-classes> -->
-			</batch:tasklet>			
+			<batch:partition partitioner="partitioner">
+				<batch:step>			
+					<batch:tasklet throttle-limit="1">
+						<batch:chunk reader="cvsFileItemReader" writer="mysqlItemWriter"
+							commit-interval="30">
+						</batch:chunk>
+					</batch:tasklet>
+				</batch:step>
+				<batch:handler task-executor="executor" grid-size="6"/>
+			</batch:partition>			
 		</batch:step>
 		<batch:listeners>
 			<batch:listener ref="listener"/>

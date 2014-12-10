@@ -1,0 +1,25 @@
+based on http://www.ontheserverside.com//blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications
+
+////Local Chunking(1000 data)
+commit interval :3, throttle-limit : 4
+================================= Start Wed Dec 10 13:50:41 ICT 2014
+================================= End   Wed Dec 10 13:52:09 ICT 2014
+
+commit interval :30, throttle-limit : 4
+================================= Start Wed Dec 10 13:55:24 ICT 2014
+================================= End   Wed Dec 10 13:56:04 ICT 2014
+
+commit interval :30, throttle-limit : 10
+================================= Start Wed Dec 10 14:08:22 ICT 2014
+================================= End   Wed Dec 10 14:08:40 ICT 2014
+
+
+////Local Partitioning(6000 data)
+////Kesimpulan untuk local partitioning, bagus untuk ngetrack/retry jika ada error, tapi untuk input stream(biasanya file) mending pake local chunking aja, karena kalau pakai partitioning terkadang stream sudah di close sama partition yg terakhir, padahal masih ada partion yg memproses
+belum di partitioning
+================================= Start Wed Dec 10 14:25:22 ICT 2014
+================================= End   Wed Dec 10 14:26:35 ICT 2014
+
+//sudah dipartitioning gridsize=6
+================================= Start Wed Dec 10 14:50:10 ICT 2014
+================================= End   Wed Dec 10 14:51:49 ICT 2014
