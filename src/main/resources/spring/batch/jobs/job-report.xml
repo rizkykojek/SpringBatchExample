@@ -8,15 +8,26 @@
 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
     <bean id="report" class="com.mkyong.model.Report" scope="prototype" />
+    <bean id="listener" class="com.mkyong.listener.ReportJobListener" scope="singleton"/>
     
 	<batch:job id="reportJob">
 		<batch:step id="step1">
-			<batch:tasklet>
+			<batch:tasklet start-limit="3">
 				<batch:chunk reader="cvsFileItemReader" writer="mysqlItemWriter"
-					commit-interval="2">
+					commit-interval="3">
+				
+					<!-- <batch:skippable-exception-classes>
+						<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
+					</batch:skippable-exception-classes> -->
 				</batch:chunk>
+				<!-- <batch:no-rollback-exception-classes>
+					<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
+				</batch:no-rollback-exception-classes> -->
 			</batch:tasklet>
 		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="listener"/>
+		</batch:listeners>
 	</batch:job>
 
 	<bean id="cvsFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
